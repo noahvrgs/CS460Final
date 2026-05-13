@@ -10,12 +10,12 @@
 
 ---
 
-## Entry 1 – [Date]: Initial Plan
+## Entry 1 – [5/12/2026]: Initial Plan
 
 > Required. Write this before writing any code. Describe your plan: what you will
 > implement first, what parts you expect to be difficult, and how you plan to test.
 
-_Your entry here._
+_I'll start out by just implementing Dijkstra's to precompute the distances between the entrance, relic chambers, and the exit. The most difficult part will most likely be the recursive search later on since I need to make sure that the pruning logic discards the expensive paths without missing the global optimum. Lastly to test my work, I'll use the test cases provided to make sure everything works as intended. For today, I'll be doing parts 1 and 2._
 
 ---
 

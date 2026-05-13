@@ -17,13 +17,13 @@
 > per question. Each bullet should be 1-2 sentences max.
 
 - **Why a single shortest-path run from S is not enough:**
-  _Your answer here._
+  _Because we need to travel between relics, not just from S to everywhere._
 
 - **What decision remains after all inter-location costs are known:**
-  _Your answer here._
+  _What order to visit the relics._
 
 - **Why this requires a search over orders (one sentence):**
-  _Your answer here._
+  _Since there's many different orders, the cheapest indiv. steps dont always get the cheapest overall path._
 
 ---
 
@@ -35,8 +35,8 @@
 
 | Source Node Type | Why it is a source |
 |---|---|
-| _node type_ | _one-line reason_ |
-| _node type_ | _one-line reason_ |
+| _Entrance (S)_ | _find the cheapest starting path to the first relic_ |
+| _Relic Chambers (M)_ | _find the cheapest paths between relics and from the last relic to the exit_ |
 
 ### Part 2b: Distance Storage
 
@@ -44,20 +44,20 @@
 
 | Property | Your answer |
 |---|---|
-| Data structure name | |
-| What the keys represent | |
-| What the values represent | |
-| Lookup time complexity | |
-| Why O(1) lookup is possible | |
+| Data structure name | _Nested Dictionary_ |
+| What the keys represent | _Source Node and Destination Node_ |
+| What the values represent | _Min. fuel cost_ |
+| Lookup time complexity | _O(1)_ |
+| Why O(1) lookup is possible | _Because hash map lookups provide constant time lookups_ |
 
 ### Part 2c: Precomputation Complexity
 
 > State the total complexity and show the arithmetic. Two to three lines max.
 
-- **Number of Dijkstra runs:** _your answer_
-- **Cost per run:** _your answer_
-- **Total complexity:** _your answer_
-- **Justification (one line):** _your answer_
+- **Number of Dijkstra runs:** _k+1_
+- **Cost per run:** _O(m log n)_
+- **Total complexity:** _O((k+1) m log n)_
+- **Justification (one line):** _Run 1 dijkstra for the start node and for each of the k relics to build the distance table_
 
 ---
 

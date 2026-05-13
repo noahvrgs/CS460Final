@@ -32,7 +32,9 @@ def explain_problem():
         Your Part 1 README answers, written as a string.
         Must match what you wrote in README Part 1.
 
-    TODO
+    - Because we need to travel between relics, not just from S to everywhere.
+    - What order to visit the relics.
+    - Since there's many different orders, the cheapest indiv. steps don't always get the cheapest overall path.
     """
     return "TODO"
 
@@ -56,7 +58,7 @@ def select_sources(spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    return list(set([spawn] + relics))
 
 
 def run_dijkstra(graph, source):
@@ -75,7 +77,20 @@ def run_dijkstra(graph, source):
 
     TODO
     """
-    pass
+    distances = {node: float('inf') for node in graph}
+    distances[source] = 0
+    pq = [(0, source)]
+    
+    while pq:
+        curDistance, u = heapq.heappop(pq)
+        if curDistance > distances[u]:
+            continue
+        for v, weight in graph.get(u, []):
+            distance = curDistance + weight
+            if distance < distances[v]:
+                distances[v] = distance
+                heapq.heappush(pq, (distance, v))
+    return distances
 
 
 def precompute_distances(graph, spawn, relics, exit_node):
@@ -95,7 +110,11 @@ def precompute_distances(graph, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    sources = select_sources(spawn, relics, exit_node)
+    distanceTable = {}
+    for s in sources:
+        distanceTable[s] = run_dijkstra(graph, s)
+    return distanceTable
 
 
 # =============================================================================
