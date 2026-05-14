@@ -19,12 +19,12 @@ _I'll start out by just implementing Dijkstra's to precompute the distances betw
 
 ---
 
-## Entry 2 – [Date]: [Short description]
+## Entry 2 – [5/13/2026]: [Part 3]
 
 > Required. At least one entry must describe a bug, wrong assumption, or design change
 > you encountered. Describe what went wrong and how you resolved it.
 
-_Your entry here._
+_I didn't have much time to get what I wanted to get done. Today I just answered the questions in part C and inserted them into dijkstra invariant check function. Tomorrow I plan to finishing the remaining parts and submitting the final._
 
 ---
 

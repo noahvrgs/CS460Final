@@ -32,11 +32,12 @@ def explain_problem():
         Your Part 1 README answers, written as a string.
         Must match what you wrote in README Part 1.
 
-    - Because we need to travel between relics, not just from S to everywhere.
+    """
+    return """"
+            - Because we need to travel between relics, not just from S to everywhere.
     - What order to visit the relics.
     - Since there's many different orders, the cheapest indiv. steps don't always get the cheapest overall path.
-    """
-    return "TODO"
+            """
 
 
 # =============================================================================
@@ -131,7 +132,15 @@ def dijkstra_invariant_check():
 
     TODO
     """
-    return "TODO"
+    return """
+            - The locations where the engine found the absolute min. fuel cost from the start
+            - The cheapest known fuel cost discovered only using finalized chambers
+            - The source starts w/ 0 cost and all the other rooms are set to infinity. It's correct because nothing is explored yet.
+            - All corridor costs are nonnegative, by picking the current min makes sure that no other path can loop back and give a cheaper route.
+            - Every reachable room has been assigned to be true, which is the optimal shortest path distance
+            - If the distances are wrong, it'll make its plan based on fake fuel costs and choose a collection order that isn't the cheapest.
+
+        """
 
 
 # =============================================================================

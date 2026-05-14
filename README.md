@@ -72,29 +72,29 @@
 > Do not copy the invariant text from the spec.
 
 - **For nodes already finalized (in S):**
-  _Your answer here._
+  _The locations where the engine found the absolute min. fuel cost from the start_
 
 - **For nodes not yet finalized (not in S):**
-  _Your answer here._
+  _The cheapest known fuel cost discovered only using finalized chambers_
 
 ### Part 3b: Why Each Phase Holds
 
 > One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
-  _Your answer here._
+  _The source starts w/ 0 cost and all the other rooms are set to infinity. It's correct because nothing is explored yet._
 
 - **Maintenance : why finalizing the min-dist node is always correct:**
-  _Your answer here._
+  _All corridor costs are nonnegative, by picking the current min makes sure that no other path can loop back and give a cheaper route._
 
 - **Termination : what the invariant guarantees when the algorithm ends:**
-  _Your answer here._
+  _Every reachable room has been assigned to be true, which is the optimal shortest path distance_
 
 ### Part 3c: Why This Matters for the Route Planner
 
 > One sentence connecting correct distances to correct routing decisions.
 
-_Your answer here._
+_If the distances are wrong, it'll make its plan based on fake fuel costs and choose a collection order that isn't the cheapest._
 
 ---
 
