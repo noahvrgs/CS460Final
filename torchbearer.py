@@ -33,11 +33,14 @@ def explain_problem():
         Must match what you wrote in README Part 1.
 
     """
-    return """"
-            - Because we need to travel between relics, not just from S to everywhere.
-    - What order to visit the relics.
-    - Since there's many different orders, the cheapest indiv. steps don't always get the cheapest overall path.
-            """
+    answer = (
+        "- Because we need to travel between relics, not just from S to everywhere."
+        "- What order to visit the relics."
+        "- Since there's many different orders, the cheapest indiv. steps don't always get the cheapest overall path."
+    )
+    
+    
+    return answer
 
 
 # =============================================================================
@@ -57,7 +60,6 @@ def select_sources(spawn, relics, exit_node):
     list[node]
         No duplicates. Order does not matter.
 
-    TODO
     """
     return list(set([spawn] + relics))
 
@@ -76,7 +78,6 @@ def run_dijkstra(graph, source):
         Minimum cost from source to every node in graph.
         Unreachable nodes map to float('inf').
 
-    TODO
     """
     distances = {node: float('inf') for node in graph}
     distances[source] = 0
@@ -109,7 +110,6 @@ def precompute_distances(graph, spawn, relics, exit_node):
         Nested structure supporting dist_table[u][v] lookups
         for every source u your design requires.
 
-    TODO
     """
     sources = select_sources(spawn, relics, exit_node)
     distanceTable = {}
@@ -130,17 +130,18 @@ def dijkstra_invariant_check():
         Your Part 3 README answers, written as a string.
         Must match what you wrote in README Part 3.
 
-    TODO
     """
-    return """
-            - The locations where the engine found the absolute min. fuel cost from the start
-            - The cheapest known fuel cost discovered only using finalized chambers
-            - The source starts w/ 0 cost and all the other rooms are set to infinity. It's correct because nothing is explored yet.
-            - All corridor costs are nonnegative, by picking the current min makes sure that no other path can loop back and give a cheaper route.
-            - Every reachable room has been assigned to be true, which is the optimal shortest path distance
-            - If the distances are wrong, it'll make its plan based on fake fuel costs and choose a collection order that isn't the cheapest.
-
-        """
+    answer = (
+        "- The locations where the engine found the absolute min. fuel cost from the start"
+        "- The cheapest known fuel cost discovered only using finalized chambers"
+        "- The source starts w/ 0 cost and all the other rooms are set to infinity. It's correct because nothing is explored yet."
+        "- The source starts w/ 0 cost and all the other rooms are set to infinity. It's correct because nothing is explored yet."
+        "- All corridor costs are nonnegative, by picking the current min makes sure that no other path can loop back and give a cheaper route."
+        "- Every reachable room has been assigned to be true, which is the optimal shortest path distance"
+        " - If the distances are wrong, it'll make its plan based on fake fuel costs and choose a collection order that isn't the cheapest."
+    )
+    
+    return answer
 
 
 # =============================================================================
@@ -148,6 +149,7 @@ def dijkstra_invariant_check():
 # =============================================================================
 
 def explain_search():
+    
     """
     Returns
     -------
@@ -155,9 +157,24 @@ def explain_search():
         Your Part 4 README answers, written as a string.
         Must match what you wrote in README Part 4.
 
-    TODO
     """
-    return "TODO"
+    answer = (
+        "The failure mode: Proof by counterexample"
+        "Counter-example setup: Consider this graph."
+        "\tS: [(B, 1), (C, 5), (D, 5)]"
+        "\tB: [(C, 1), (D, 10), (T, 1)]"
+        "\tC: [(B, 10), (D, 1), (T, 100)]"
+        "\tD: [(B, 1), (C, 10), (T, 100)]"
+        "\tT: []"
+        "What greedy picks: S -> B -> C -> D -> T, with total cost of 103"
+        "What optimal picks: S -> C -> D -> B -> T, with total cost of 8"
+        "Why greedy loses: Choosing the closest relic immediately forces a path that sacrifices the most efficient exit route, turning a low cost start expensive"
+        "The algorithm must explore all valid orders in which the relics can be visited and compare their total cost, pruning any order whose partial cost already exceeds the best known complete route."
+    )
+    
+    
+    
+    return answer
 
 
 # =============================================================================
@@ -182,9 +199,18 @@ def find_optimal_route(dist_table, spawn, relics, exit_node):
         (minimum_fuel_cost, ordered_relic_list)
         Returns (float('inf'), []) if no valid route exists.
 
-    TODO
     """
-    pass
+
+    best = [float('inf'), []]
+    relics_remaining = set(relics)
+    relics_visisted_order = []
+    cost_so_far = 0
+    
+    _explore(dist_table, spawn, relics_remaining, relics_visisted_order, cost_so_far, exit_node, best)
+    
+    return (best[0], best[1])        
+    
+    
 
 
 def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
@@ -209,14 +235,39 @@ def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
     None
         Updates best in place.
 
-    TODO
     Implement: base case, pruning, recursive case, backtracking.
 
     REQUIRED: Add a 1-2 sentence comment near your pruning condition
     explaining why it is safe (cannot skip the optimal solution).
     This comment is graded.
     """
-    pass
+    if not relics_remaining:
+        exit_cost = dist_table[current_loc].get(exit_node, float('inf'))
+        total_cost = cost_so_far + exit_cost
+        if total_cost < best[0]:
+            best[0] = total_cost
+            best[1] = list(relics_visited_order)
+        return
+    
+    #Pruning 
+    
+    #Safe to prune: all edge weights are nonnegative, so cost_so_far can only increase. Any path from here cannot beat best[0].
+    if cost_so_far >= best[0]:
+        return
+    
+    #Recursive Case
+    for relic in list(relics_remaining):
+        travel_cost = dist_table[current_loc].get(relic, float('inf'))
+        if travel_cost == float('inf'):
+            continue
+    
+        relics_remaining.remove(relic)
+        relics_visited_order.append(relic)
+        
+        _explore(dist_table, relic, relics_remaining, relics_visited_order, cost_so_far + travel_cost, exit_node, best)
+        
+        relics_visited_order.pop()
+        relics_remaining.add(relic)
 
 
 # =============================================================================
@@ -240,7 +291,9 @@ def solve(graph, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    dist_table = precompute_distances(graph, spawn, relics, exit_node)
+    
+    return find_optimal_route(dist_table, spawn, relics, exit_node)
 
 
 # =============================================================================

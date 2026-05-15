@@ -4,17 +4,9 @@
 **Student ID:** 131028726
 **Course:** CS 460 – Algorithms | Spring 2026
 
-> This README is your project documentation. Write it the way a developer would document
-> their design decisions , bullet points, brief justifications, and concrete examples where
-> required. You are not writing an essay. You are explaining what you built and why you built
-> it that way. Delete all blockquotes like this one before submitting.
-
 ---
 
 ## Part 1: Problem Analysis
-
-> Document why this problem is not just a shortest-path problem. Three bullet points, one
-> per question. Each bullet should be 1-2 sentences max.
 
 - **Why a single shortest-path run from S is not enough:**
   _Because we need to travel between relics, not just from S to everywhere._
@@ -31,16 +23,12 @@
 
 ### Part 2a: Source Selection
 
-> List the source node types as a bullet list. For each, one-line reason.
-
 | Source Node Type | Why it is a source |
 |---|---|
 | _Entrance (S)_ | _find the cheapest starting path to the first relic_ |
 | _Relic Chambers (M)_ | _find the cheapest paths between relics and from the last relic to the exit_ |
 
 ### Part 2b: Distance Storage
-
-> Fill in the table. No prose required.
 
 | Property | Your answer |
 |---|---|
@@ -52,8 +40,6 @@
 
 ### Part 2c: Precomputation Complexity
 
-> State the total complexity and show the arithmetic. Two to three lines max.
-
 - **Number of Dijkstra runs:** _k+1_
 - **Cost per run:** _O(m log n)_
 - **Total complexity:** _O((k+1) m log n)_
@@ -63,13 +49,7 @@
 
 ## Part 3: Algorithm Correctness
 
-> Document your understanding of why Dijkstra produces correct distances.
-> Bullet points and short sentences throughout. No paragraphs.
-
 ### Part 3a: What the Invariant Means
-
-> Two bullets: one for finalized nodes, one for non-finalized nodes.
-> Do not copy the invariant text from the spec.
 
 - **For nodes already finalized (in S):**
   _The locations where the engine found the absolute min. fuel cost from the start_
@@ -79,7 +59,6 @@
 
 ### Part 3b: Why Each Phase Holds
 
-> One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
   _The source starts w/ 0 cost and all the other rooms are set to infinity. It's correct because nothing is explored yet._
@@ -92,7 +71,6 @@
 
 ### Part 3c: Why This Matters for the Route Planner
 
-> One sentence connecting correct distances to correct routing decisions.
 
 _If the distances are wrong, it'll make its plan based on fake fuel costs and choose a collection order that isn't the cheapest._
 
@@ -102,20 +80,20 @@ _If the distances are wrong, it'll make its plan based on fake fuel costs and ch
 
 ### Why Greedy Fails
 
-> State the failure mode. Then give a concrete counter-example using specific node names
-> or costs (you may use the illustration example from the spec). Three to five bullets.
-
-- **The failure mode:** _Your answer here._
-- **Counter-example setup:** _Your answer here._
-- **What greedy picks:** _Your answer here._
-- **What optimal picks:** _Your answer here._
-- **Why greedy loses:** _Your answer here._
+- **The failure mode:** _Proof by counterexample_
+- **Counter-example setup:** _Consider this graph._
+  + _S: [(B, 1), (C, 5), (D, 5)]_
+  + _B: [(C, 1), (D, 10), (T, 1)]_
+  + _C: [(B, 10), (D, 1), (T, 100)]_
+  + _D: [(B, 1), (C, 10), (T, 100)]_
+  + _T: []_
+- **What greedy picks:** _S -> B -> C -> D -> T, with total cost of 103_
+- **What optimal picks:** _S -> C -> D -> B -> T, with total cost of 8_
+- **Why greedy loses:** _Choosing the closest relic immediately forces a path that sacrifices the most efficient exit route, turning a low cost start expensive_
 
 ### What the Algorithm Must Explore
 
-> One bullet. Must use the word "order."
-
-- _Your answer here._
+- _The algorithm must explore all valid orders in which the relics can be visited and compare their total cost, pruning any order whose partial cost already exceeds the best known complete route._
 
 ---
 
@@ -123,33 +101,26 @@ _If the distances are wrong, it'll make its plan based on fake fuel costs and ch
 
 ### Part 5a: State Representation
 
-> Document the three components of your search state as a table.
-> Variable names here must match exactly what you use in torchbearer.py.
-
 | Component | Variable name in code | Data type | Description |
 |---|---|---|---|
-| Current location | | | |
-| Relics already collected | | | |
-| Fuel cost so far | | | |
+| Current location | _current_loc_ | _String_ | _The lookup index for the current location in the graph and distance table_ |
+| Relics already collected | _relics_remaining_ | _set_ | _Tracks relics visited by the current branch_ |
+| Fuel cost so far | _cost_so_far_ | _float_ | _Tracks total cost_ |
 
 ### Part 5b: Data Structure for Visited Relics
 
-> Fill in the table.
-
 | Property | Your answer |
 |---|---|
-| Data structure chosen | |
-| Operation: check if relic already collected | Time complexity: |
-| Operation: mark a relic as collected | Time complexity: |
-| Operation: unmark a relic (backtrack) | Time complexity: |
-| Why this structure fits | |
+| Data structure chosen | _Set_ |
+| Operation: check if relic already collected | Time complexity: _O(1)_ |
+| Operation: mark a relic as collected | Time complexity: _O(1)_ |
+| Operation: unmark a relic (backtrack) | Time complexity: _O(1)_ |
+| Why this structure fits | _Because accessing items are constant time which is great for checking and updating_ |
 
 ### Part 5c: Worst-Case Search Space
 
-> Two bullets.
-
-- **Worst-case number of orders considered:** _Your answer (in terms of k)._
-- **Why:** _One-line justification._
+- **Worst-case number of orders considered:** _O(k!) where k represents the total num of relics to be collected._
+- **Why:** _If no branches are pruned, its forced to evaluate every possible permutation of relic visits across the entire search tree._
 
 ---
 
@@ -157,30 +128,23 @@ _If the distances are wrong, it'll make its plan based on fake fuel costs and ch
 
 ### Part 6a: Best-So-Far Tracking
 
-> Three bullets.
-
-- **What is tracked:** _Your answer here._
-- **When it is used:** _Your answer here._
-- **What it allows the algorithm to skip:** _Your answer here._
+- **What is tracked:** _Current cost and the path is takes_
+- **When it is used:** _The cost is checked for every recursion and when it completes_
+- **What it allows the algorithm to skip:** _Any paths that would give a higher total cost than the current best_
 
 ### Part 6b: Lower Bound Estimation
 
-> Three bullets.
-
-- **What information is available at the current state:** _Your answer here._
-- **What the lower bound accounts for:** _Your answer here._
-- **Why it never overestimates:** _Your answer here._
+- **What information is available at the current state:** _Traveled cost and nodes that haven't been visited_
+- **What the lower bound accounts for:** _The initial pruning which eliminates any branches that are greater than the total cost_
+- **Why it never overestimates:** _Because every choice in greedy is made using the smallest available cost_
 
 ### Part 6c: Pruning Correctness
 
-> One to two bullets. Explain why pruning is safe.
-
-- _Your answer here._
+- _All edge weights are nonnegative, meaning a path can't become cheaper the more you travel._
+- _In the middle of a route, if it already is greater than the cost of a known complete path, it can't be the optimal. Meaning that it can be discarded._
 
 ---
 
 ## References
 
-> Bullet list. If none beyond lecture notes, write that.
-
-- _Your references here._
+- _None beyond lecture notes._
